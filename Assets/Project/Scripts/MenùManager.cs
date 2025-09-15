@@ -5,7 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MenùManager : MonoBehaviour
 {
-   public void NewGame()
+    [SerializeField] private AudioSource maxAudio;
+    [SerializeField] private AudioClip _buttonSound;
+
+    public void PlayButtonSound()
+    {
+        maxAudio.PlayOneShot(_buttonSound);
+    }
+
+    public void NewGame()
     {
         SceneManager.LoadScene(1);
     }

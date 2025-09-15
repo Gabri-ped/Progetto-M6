@@ -20,4 +20,11 @@ public class MovingSaw : MonoBehaviour
 
         transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            LifeController.instance ?.LoseLife();
+        }
+    }
 }

@@ -17,55 +17,33 @@ public class LifeController : MonoBehaviour
     public Transform player;
     public Transform respawnPoint;
 
-    [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip loseLifeClip;
-    public AudioClip extraLifeClip;   
-    public AudioClip defeatClip;      
-
     [Header("Game Over")]
     public GameObject gameOverCanvas;
 
     private bool isRespawning = false;
+    public static LifeController instance;
 
     void Start()
     {
+        instance = this;
         currentLives = maxLives;
         UpdateHeartsUI();
     }
 
     public void LoseLife()
     {
-        if (currentLives <= 0 || isRespawning) return;
-
         currentLives--;
         UpdateHeartsUI();
 
-        if (loseLifeClip != null && audioSource != null)
-            audioSource.PlayOneShot(loseLifeClip);
-
-        if (currentLives <= 0)
-        {
-            GameOver();
-        }
-        else
+        if (currentLives > 0)
         {
             StartCoroutine(RespawnCoroutine());
         }
-    }
-
-    public void AddLife()
-    {
-        if (currentLives < maxLives)
+        else
         {
-            currentLives++;
-            UpdateHeartsUI();
-
-            if (extraLifeClip != null && audioSource != null)
-                audioSource.PlayOneShot(extraLifeClip);
+            GameOver();
         }
     }
-
     IEnumerator RespawnCoroutine()
     {
         isRespawning = true;
@@ -94,26 +72,8 @@ public class LifeController : MonoBehaviour
 
     void GameOver()
     {
-
         if (gameOverCanvas != null)
             gameOverCanvas.SetActive(true);
-
-        if (defeatClip != null && audioSource != null)
-            audioSource.PlayOneShot(defeatClip);
-    }
-
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            LoseLife();
-        }
-
-        if (other.CompareTag("Life"))
-        {
-            AddLife();
-            Destroy(other.gameObject);
-        }
+            AudioManager.Instance.PlayLoseSound();
     }
 }

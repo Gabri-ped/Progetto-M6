@@ -7,11 +7,10 @@ using UnityEngine;
 public class CoinsManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI coinsText;
-
-    public static CoinsManager instance;
-
+    [SerializeField] private int maxCoins = 10;
     public int totalCoins = 0;
 
+    public static CoinsManager instance;
 
     void Awake()
     {
@@ -29,14 +28,14 @@ public class CoinsManager : MonoBehaviour
         UpdateUI();
     }
 
-    public void AddCoins(int amount)
+    public void AddCoins(int value)
     {
-        totalCoins += amount;
-        
+        totalCoins += value;
+        UpdateUI();
     }
     public void UpdateUI()
     {
-        coinsText.text = "Coins " + totalCoins.ToString();
+        coinsText.text = "Coins " + totalCoins + "/ " + maxCoins;
     }
 
 }
