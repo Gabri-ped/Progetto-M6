@@ -13,6 +13,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip loseSound;
     [SerializeField] private AudioClip buttonSound;
     [SerializeField] private AudioClip bombSound;
+    [SerializeField] private AudioClip knifeSound;
 
     public static AudioManager Instance;
 
@@ -84,6 +85,12 @@ public class AudioManager : MonoBehaviour
     {
         if (loseSound != null)
             sfxSource.PlayOneShot(bombSound);
+    }
+
+    public void PlayKnifeSound()
+    {
+        if (knifeSound != null)
+            sfxSource.PlayOneShot(knifeSound);
     }
 }
 

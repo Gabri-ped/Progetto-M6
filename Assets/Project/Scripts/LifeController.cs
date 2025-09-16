@@ -6,7 +6,7 @@ public class LifeController : MonoBehaviour
 {
     [Header("Impostazioni Vite")]
     public int maxLives = 3;
-    private int currentLives;
+    public int currentLives;
 
     [Header("UI Cuori")]
     public Image[] hearts;
@@ -69,7 +69,6 @@ public class LifeController : MonoBehaviour
             hearts[i].sprite = i < currentLives ? fullHeart : emptyHeart;
         }
     }
-
     void GameOver()
     {
         if (gameOverCanvas != null)

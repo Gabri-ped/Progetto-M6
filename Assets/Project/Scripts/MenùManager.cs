@@ -23,8 +23,9 @@ public class MenùManager : MonoBehaviour
     }
     public void LoadGame()
     {
-
+        SaveSystem.Instance.LoadGame();
     }
+   
     public void Settings()
     {
         SceneManager.LoadScene(2);
