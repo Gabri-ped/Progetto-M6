@@ -4,19 +4,22 @@ using Newtonsoft.Json;
 public class SaveSystem : MonoBehaviour
 {
     [SerializeField] private Transform _player;
-    private SaveData _saveData;
+    public SaveData SaveData { get; private set; }
+    public bool _isLoad { get; private set; }
     private string _path;
     private string _data;
+   
 
-    public static SaveSystem Instance { get; private set; }
+    public static SaveSystem Instance;
     void Awake()
     {
-        _saveData = new SaveData();
+        SaveData = new SaveData();
         _path = Application.dataPath + "/savefile.txt";
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            _path = Path.Combine(Application.persistentDataPath, "save.json");
         }
         else
         {
@@ -46,8 +49,8 @@ public class SaveSystem : MonoBehaviour
         int coins = CoinsManager.instance.totalCoins;
         int lifes = LifeController.instance.currentLives;
 
-        _saveData = new SaveData(position, rotation, coins, lifes);
-        _data = JsonConvert.SerializeObject(_saveData, Formatting.Indented);
+        SaveData = new SaveData(position, rotation, coins, lifes);
+        _data = JsonConvert.SerializeObject(SaveData, Formatting.Indented);
         try
         {
             File.WriteAllText(_path, _data);
@@ -63,17 +66,33 @@ public class SaveSystem : MonoBehaviour
         if (File.Exists(_path))
         {
             _data = File.ReadAllText(_path);
-            _saveData = JsonConvert.DeserializeObject<SaveData>(_data);
-            _player.transform.position = new Vector3(_saveData.position[0], _saveData.position[1], _saveData.position[2]);
-            _player.transform.rotation = new Quaternion(_saveData.rotation[0], _saveData.rotation[1], _saveData.rotation[2], _saveData.rotation[3]);
-            LifeController.instance.currentLives = _saveData.lifes;
-            CoinsManager.instance.totalCoins = _saveData.coins;
+            SaveData = JsonConvert.DeserializeObject<SaveData>(_data);
+            _isLoad = true;
         }
         else
         {
             Debug.Log("No save file found");
           
         }
+    }
+
+    public void LoadPlayerInfo()
+    {
+        FoundPlayer();
+        _player.transform.position = new Vector3(SaveData.position[0], SaveData.position[1], SaveData.position[2]);
+        _player.transform.rotation = new Quaternion(SaveData.rotation[0], SaveData.rotation[1], SaveData.rotation[2], SaveData.rotation[3]);
+        LifeController.instance.currentLives = SaveData.lifes;
+        CoinsManager.instance.totalCoins = SaveData.coins;
+    }
+
+    public void FoundPlayer()
+    {
+        _player = PlayerController.instance.transform;
+        if (_isLoad)
+        {
+            LoadPlayerInfo();
+        }
+        
     }
 }
 
