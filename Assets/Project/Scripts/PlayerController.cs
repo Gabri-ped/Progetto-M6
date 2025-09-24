@@ -22,13 +22,18 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        SaveSystem.Instance.FoundPlayer();
     }
 
     void Start()
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
+
+        if (SaveSystem.Instance != null && SaveSystem.Instance._isLoad)
+        {
+            SaveSystem.Instance.FoundPlayer();
+            SaveSystem.Instance.LoadPlayerInfo();
+        }
     }
 
     

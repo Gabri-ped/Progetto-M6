@@ -69,6 +69,12 @@ public class LifeController : MonoBehaviour
             hearts[i].sprite = i < currentLives ? fullHeart : emptyHeart;
         }
     }
+
+    public void SetLives(int value)
+    {
+        currentLives = Mathf.Clamp(value, 0, maxLives);
+        UpdateHeartsUI();
+    }
     void GameOver()
     {
         if (gameOverCanvas != null)

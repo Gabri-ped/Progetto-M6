@@ -78,21 +78,26 @@ public class SaveSystem : MonoBehaviour
 
     public void LoadPlayerInfo()
     {
-        FoundPlayer();
-        _player.transform.position = new Vector3(SaveData.position[0], SaveData.position[1], SaveData.position[2]);
-        _player.transform.rotation = new Quaternion(SaveData.rotation[0], SaveData.rotation[1], SaveData.rotation[2], SaveData.rotation[3]);
-        LifeController.instance.currentLives = SaveData.lifes;
-        CoinsManager.instance.totalCoins = SaveData.coins;
+        if(_player == null)
+        {
+            FoundPlayer();
+        }
+        if (_isLoad && _player != null)
+        {
+            _player.position = new Vector3(SaveData.position[0], SaveData.position[1], SaveData.position[2]);
+            _player.rotation = new Quaternion(SaveData.rotation[0], SaveData.rotation[1], SaveData.rotation[2], SaveData.rotation[3]);
+
+            LifeController.instance.SetLives(SaveData.lifes);
+            CoinsManager.instance.SetCoins(SaveData.coins);
+
+            _isLoad = false;
+        }
+
     }
 
     public void FoundPlayer()
     {
         _player = PlayerController.instance.transform;
-        if (_isLoad)
-        {
-            LoadPlayerInfo();
-        }
-        
     }
 }
 

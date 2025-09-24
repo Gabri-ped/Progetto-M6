@@ -38,4 +38,9 @@ public class CoinsManager : MonoBehaviour
         coinsText.text = "Coins " + totalCoins + "/ " + maxCoins;
     }
    
+    public void SetCoins(int value)
+    {
+        totalCoins = value;
+        UpdateUI();
+    }
 }
