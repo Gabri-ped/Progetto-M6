@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.IO;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
+using System.Collections;
 public class SaveSystem : MonoBehaviour
 {
     [SerializeField] private Transform _player;
@@ -19,12 +21,27 @@ public class SaveSystem : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
             _path = Path.Combine(Application.persistentDataPath, "save.json");
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex == 1)
+        {
+            StartCoroutine(LoadPlayerDelayed());
+        }
+    }
+
+    private IEnumerator LoadPlayerDelayed()
+    {
+        yield return null; // aspetta un frame
+        FoundPlayer();
+        if (_isLoad) LoadPlayerInfo();
     }
 
     private void Update()

@@ -4,24 +4,34 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 10f;
-    public float lifeTime = 3f;
-    public string poolTag;
+    [SerializeField] private float speed = 20f;
+    [SerializeField] private float lifeTime = 5f;
 
-    private void OnEnable() => Invoke(nameof(ReturnToPool), lifeTime);
-    private void OnDisable() => CancelInvoke();
+    private float timer;
 
-    void Update() => transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    private void OnEnable()
+    {
+        timer = lifeTime;
+    }
+
+    private void Update()
+    {
+        transform.position += transform.forward * (speed * Time.deltaTime);
+
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
+            gameObject.SetActive(false);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-           LifeController.instance.LoseLife();
-           ReturnToPool();
+            LifeController.instance.LoseLife();
         }
-    }
 
-    void ReturnToPool() => PoolManager.Instance.ReturnToPool(poolTag, gameObject);
+        gameObject.SetActive(false); 
+    }
 }
+
 

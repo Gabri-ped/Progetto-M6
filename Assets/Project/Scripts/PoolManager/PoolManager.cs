@@ -2,25 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Pool
-{
-    public string tag;
-    public GameObject prefab;
-    public int size;
-}
 public class PoolManager : MonoBehaviour
 {
     public static PoolManager Instance;
 
-    [SerializeField] private List<Pool> pools;
+    [System.Serializable]
+    public class Pool
+    {
+        public string tag;
+        public GameObject prefab;
+        public int size;
+    }
+
+    public List<Pool> pools;
     private Dictionary<string, Queue<GameObject>> poolDictionary;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        Instance = this;
+    }
 
+    private void Start()
+    {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
         foreach (Pool pool in pools)
@@ -30,7 +33,7 @@ public class PoolManager : MonoBehaviour
             for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab);
-                obj.SetActive(true);
+                obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }
 
@@ -42,31 +45,19 @@ public class PoolManager : MonoBehaviour
     {
         if (!poolDictionary.ContainsKey(tag))
         {
-            Debug.LogWarning("Pool con tag " + tag + " non esiste!");
+            Debug.LogWarning($"Pool con tag {tag} non esiste!");
             return null;
         }
 
-        GameObject objectToSpawn = poolDictionary[tag].Count > 0 ? poolDictionary[tag].Dequeue() : Instantiate(GetPrefab(tag));
-        objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
+        GameObject obj = poolDictionary[tag].Dequeue();
 
-        return objectToSpawn;
-    }
+        obj.SetActive(true);
+        obj.transform.position = position;
+        obj.transform.rotation = rotation;
 
-    public void ReturnToPool(string tag, GameObject obj)
-    {
-        obj.SetActive(false);
         poolDictionary[tag].Enqueue(obj);
-    }
 
-    private GameObject GetPrefab(string tag)
-    {
-        foreach (Pool pool in pools)
-        {
-            if (pool.tag == tag) return pool.prefab;
-        }
-        return null;
+        return obj;
     }
 }
 

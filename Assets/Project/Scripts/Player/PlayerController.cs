@@ -28,12 +28,6 @@ public class PlayerController : MonoBehaviour
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
-
-        if (SaveSystem.Instance != null && SaveSystem.Instance._isLoad)
-        {
-            SaveSystem.Instance.FoundPlayer();
-            SaveSystem.Instance.LoadPlayerInfo();
-        }
     }
 
     
