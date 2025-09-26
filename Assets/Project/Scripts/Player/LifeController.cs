@@ -80,5 +80,6 @@ public class LifeController : MonoBehaviour
         if (gameOverCanvas != null)
             gameOverCanvas.SetActive(true);
             AudioManager.Instance.PlayLoseSound();
+            Time.timeScale = 0f;    
     }
 }

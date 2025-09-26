@@ -9,6 +9,7 @@ public class GameMenùManager : MonoBehaviour
     {
         SceneManager.LoadScene(1);
         AudioManager.Instance.PlayMusic(AudioManager.Instance.backgroundMusic);
+        Time.timeScale = 1f;
     }
 
     public void Menu()
