@@ -57,6 +57,11 @@ public class AudioManager : MonoBehaviour
         if (musicSource.isPlaying)
             musicSource.Stop();
     }
+    public void StopVictorySound()
+    {
+       if (sfxSource.isPlaying)
+           sfxSource.Stop();
+    }
     public void PlayCoinSound()
     {
         if (coinSound != null)
@@ -67,7 +72,7 @@ public class AudioManager : MonoBehaviour
     {
         StopBackgroundMusic();
         if (winSound != null)
-            sfxSource.PlayOneShot(winSound);
+            sfxSource.PlayOneShot(winSound);   
     }
 
     public void PlayLoseSound()

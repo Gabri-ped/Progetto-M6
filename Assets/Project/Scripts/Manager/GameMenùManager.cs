@@ -15,5 +15,6 @@ public class GameMenùManager : MonoBehaviour
     public void Menu()
     {
         SceneManager.LoadScene(0);
+        AudioManager.Instance.StopVictorySound();
     }
 }

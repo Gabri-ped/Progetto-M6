@@ -16,6 +16,7 @@ public class MenùManager : MonoBehaviour
     public void NewGame()
     {
         SceneManager.LoadScene(1);
+        Time.timeScale = 1f;
     }
     public void ExitGame()
     {
