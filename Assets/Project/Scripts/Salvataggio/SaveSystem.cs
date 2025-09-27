@@ -3,6 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 public class SaveSystem : MonoBehaviour
 {
     [SerializeField] private Transform _player;
@@ -66,7 +67,7 @@ public class SaveSystem : MonoBehaviour
         int coins = CoinsManager.instance.totalCoins;
         int lifes = LifeController.instance.currentLives;
 
-        SaveData = new SaveData(position, rotation, coins, lifes);
+        SaveData = new SaveData(position, rotation, coins, lifes, SaveData.collectedCoins);
         _data = JsonConvert.SerializeObject(SaveData, Formatting.Indented);
         try
         {
@@ -106,6 +107,14 @@ public class SaveSystem : MonoBehaviour
 
             LifeController.instance.SetLives(SaveData.lifes);
             CoinsManager.instance.SetCoins(SaveData.coins);
+            if (CoinRegistry.Instance != null && SaveData.collectedCoins != null)
+            {
+                CoinRegistry.Instance.DisableCollectedCoins(SaveData.collectedCoins);
+            }
+            else
+            {
+                Debug.Log("Nessun CoinRegistry o lista collectedCoins vuota.");
+            }
 
             _isLoad = false;
         }

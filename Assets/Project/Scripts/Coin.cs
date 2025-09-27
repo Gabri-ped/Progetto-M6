@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,13 +7,29 @@ public class Coin : MonoBehaviour
 {
     public int coinValue = 1;
     public float speed = 3f;
+    private CoinID coinID;
+
+    private void Awake()
+    {
+        coinID = GetComponent<CoinID>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             AudioManager.Instance.PlayCoinSound();
             CoinsManager.instance.AddCoins(coinValue);
-            Destroy(gameObject); 
+            if (SaveSystem.Instance != null && SaveSystem.Instance.SaveData != null && coinID != null)
+            {
+                if (!SaveSystem.Instance.SaveData.collectedCoins.Contains(coinID.coinID))
+                {
+                    SaveSystem.Instance.SaveData.collectedCoins.Add(coinID.coinID);
+                }
+            }
+
+            gameObject.SetActive(false);
+             
         }
     }
     void Update()

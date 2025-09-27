@@ -9,16 +9,18 @@ public class SaveData
     public float[] rotation = new float[4];
     public int coins;
     public int lifes;
+    public List <string> collectedCoins = new List<string>();
 
     public SaveData()
     {
     }
 
-    public SaveData(float[] position, float[] rotation, int coins, int lifes)
+    public SaveData(float[] position, float[] rotation, int coins, int lifes, List<string> collectedCoins)
     {
         this.position = position;
         this.rotation = rotation;
         this.coins = coins;
         this.lifes = lifes;
+        this.collectedCoins = collectedCoins ?? new List<string>();
     }
 }

@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed = 1f;
     [SerializeField] private float runSpeed = 2f;
     [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private GroundChecker _groundChecker;
     private float rotationSpeed = 0.1f;
 
     private Animator _anim;
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump")&& _groundChecker.IsGrounded)
         {
             _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             
